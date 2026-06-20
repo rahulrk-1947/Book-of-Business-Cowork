@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book of Business</title>
+    <script>
+      // Classic script: runs even if the app bundle fails, so a crash is
+      // never a silent blank page.
+      window.addEventListener('error', function (e) {
+        var r = document.getElementById('root');
+        if (!r || r.getAttribute('data-app') === 'ready') return;
+        r.innerHTML =
+          '<div style="max-width:560px;margin:14vh auto;font-family:system-ui;color:#1f2933;line-height:1.5">' +
+          '<h2 style="margin:0 0 8px">Book of Business couldn\u2019t start</h2>' +
+          '<p style="color:#c0392b;word-break:break-word">' + (e.message || 'Unknown error') + '</p>' +
+          '<p style="color:#52606d">Try opening this file in Google Chrome or Microsoft Edge. If it keeps happening, send this message to whoever gave you the file.</p>' +
+          '</div>';
+      });
+    </script>
+  </head>
+  <body>
+    <div id="root">
+      <div style="display:grid;place-items:center;height:100vh;color:#52606d;font-family:system-ui">
+        Opening Book of Business&hellip;
+      </div>
+    </div>
+    <script type="module" src="/src/web/main-web.tsx"></script>
+  </body>
+</html>

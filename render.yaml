@@ -1,0 +1,22 @@
+# One-click Render Blueprint for the Book of Business server edition.
+# In Render: New → Blueprint → point at this repo. It creates the web service,
+# a persistent disk for your data, and the secrets below.
+services:
+  - type: web
+    name: book-of-business
+    runtime: docker
+    plan: starter            # Starter is the cheapest plan that allows a persistent disk
+    healthCheckPath: /healthz
+    disk:
+      name: bob-data
+      mountPath: /var/data   # all SQLite files (control + every tenant) live here
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /var/data
+      - key: COOKIE_SECRET
+        generateValue: true   # Render generates a strong random secret
+      - key: PUBLIC_URL
+        sync: false           # set this to your service URL after first deploy (for invite links)

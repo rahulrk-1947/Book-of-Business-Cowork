@@ -1,0 +1,78 @@
+{
+  "name": "book-of-business",
+  "productName": "Book of Business",
+  "version": "1.0.0",
+  "description": "Local-first double-entry accounting for small business. Works fully offline.",
+  "license": "MIT",
+  "main": "dist-electron/main.cjs",
+  "scripts": {
+    "dev": "npm run build:main && concurrently -k \"vite\" \"wait-on tcp:5173 && electron . --dev\"",
+    "build": "npm run build:main && vite build",
+    "build:main": "node scripts/build-main.mjs",
+    "start": "npm run build && electron .",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "dist": "npm run build && electron-builder",
+    "build:web": "node scripts/gen-web-assets.mjs && vite build --config vite.web.config.ts && node scripts/finalize-web.mjs",
+    "test:web": "npm run build:web && node scripts/boot-test.cjs",
+    "build:server": "node server/build.cjs",
+    "start:server": "node dist-server/server/src/server.js",
+    "test:server": "vitest run server/test",
+    "build:server-ui": "vite build --config vite.server-ui.config.ts"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/static": "^9.1.3",
+    "@fastify/swagger": "^9.7.0",
+    "@fastify/swagger-ui": "^6.0.0",
+    "fastify": "^5.8.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.12.7"
+  },
+  "optionalDependencies": {
+    "better-sqlite3": "^12.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/sql.js": "^1.4.11",
+    "@vitejs/plugin-react": "^4.3.1",
+    "concurrently": "^9.0.0",
+    "electron": "^36.0.0",
+    "electron-builder": "^25.0.0",
+    "esbuild": "^0.23.0",
+    "fake-indexeddb": "^6.2.5",
+    "jsdom": "^29.1.1",
+    "sql.js": "^1.14.1",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.0",
+    "vite-plugin-singlefile": "^2.3.3",
+    "vitest": "^2.0.5",
+    "wait-on": "^8.0.0"
+  },
+  "build": {
+    "appId": "com.bookofbusiness.app",
+    "files": [
+      "dist/**",
+      "dist-electron/**",
+      "src/backend/schema.sql"
+    ],
+    "extraResources": [
+      {
+        "from": "src/backend/schema.sql",
+        "to": "schema.sql"
+      }
+    ],
+    "linux": {
+      "target": "AppImage"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    }
+  }
+}
